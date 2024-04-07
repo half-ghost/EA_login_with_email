@@ -39,10 +39,10 @@ async def login(email, password):
         {"Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"}
     )
     # 读取存储的cookie文件,如果上次登录过则存在"osc"和"_nx_mpcid"两个值
-    old_cookie = json.loads(read_from_file("cookie.json"))
+    old_cookie = read_from_file("cookie.json")
     # 更新session的cookie,加入"osc"和"_nx_mpcid",使登录可以不用邮箱验证码
-    if len(old_cookie) != 0:
-        session.cookie_jar.update_cookies(old_cookie)
+    if old_cookie:
+        session.cookie_jar.update_cookies(json.loads(old_cookie))
     # 第一次请求的url,请求后会返回一个带有"execution"和"initref"查询参数的登录页面
     resp1 = await session.get(start_url)
 
